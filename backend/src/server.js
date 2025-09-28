@@ -2,15 +2,28 @@ import express from "express";
 import notesRouter from "./routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
+import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5001;
 
-connectDB();
-app.use(express.json());
+// Middleware
+app.use(express.json()); // This middleware will parse JSON body: req.body
+
+app.use(rateLimiter);
+
+// Simple custome middleware
+app.use((req, res, next) => {
+  console.log(`Request method is ${req.method} & request URL is ${req.url}`);
+  next();
+});
+
 app.use("/api/notes", notesRouter);
+
+// Connect to MG server
+await connectDB();
 
 app.listen(port, () => {
   console.log("Server is opening on PORT", port);
