@@ -1,9 +1,20 @@
 import { Link } from "react-router";
 import { type Note } from "../types/note";
-import { PenSquareIcon, Trash2Icon } from "lucide-react";
+import { Loader2, PenSquareIcon, Trash2Icon } from "lucide-react";
 import { formatDate } from "../libs/utils";
+import { useDeleteNotes } from "../hooks/useDeleteNotes";
 
 const NoteCard = ({ note }: { note: Note }) => {
+  const { mutate, isPending } = useDeleteNotes();
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    if (window.confirm("Do you really want to delete this note?")) {
+      mutate(note._id);
+    }
+  };
+
   return (
     <Link
       to={`/note/${note._id}`}
@@ -19,8 +30,15 @@ const NoteCard = ({ note }: { note: Note }) => {
           </span>
           <div className="flex items-center gap-1">
             <PenSquareIcon className="size-4" />
-            <button className="btn btn-ghost btn-xs text-error">
-              <Trash2Icon className="size-4" />
+            <button
+              className="btn btn-ghost btn-xs text-error"
+              disabled={isPending}
+            >
+              {isPending ? (
+                <Loader2 className="size-4" />
+              ) : (
+                <Trash2Icon className="size-4" onClick={handleDelete} />
+              )}
             </button>
           </div>
         </div>

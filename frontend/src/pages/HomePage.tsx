@@ -1,40 +1,13 @@
-import { useState } from "react";
+import { useNotes } from "../hooks/useNotes";
+
+import { Loader2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import RateLimitedUI from "../components/RateLimitedUI";
-import { useQuery } from "@tanstack/react-query";
-import axios, { AxiosError } from "axios";
-import toast from "react-hot-toast";
-import type { Note } from "../types/note";
-import { Loader2 } from "lucide-react";
 import NoteCard from "../components/NoteCard";
+import NotesNotFound from "../components/NotesNotFound";
 
 const HomePage = () => {
-  const [isRateLimited, setIsRateLimited] = useState(false);
-
-  const { data, isLoading, error } = useQuery<Note[], AxiosError>({
-    queryKey: ["notes"],
-    queryFn: async () => {
-      try {
-        const res = await axios.get("http://localhost:5001/api/notes");
-        setIsRateLimited(false);
-
-        return res.data.map((note: Note) => ({
-          ...note,
-          createdAt: new Date(note.createdAt),
-          updatedAt: new Date(note.updatedAt),
-        }));
-      } catch (error) {
-        console.log("Error fetching notes", error);
-        if ((error as AxiosError).response?.status === 429) {
-          setIsRateLimited(true);
-        } else {
-          toast.error("Failed to load notes");
-        }
-
-        throw error;
-      }
-    },
-  });
+  const { data, isLoading, error, isRateLimited } = useNotes();
 
   return (
     <div className="min-h-screen">
@@ -48,6 +21,11 @@ const HomePage = () => {
             Loading notes...
           </div>
         )}
+
+        {!isLoading && data && data.length === 0 && !isRateLimited && (
+          <NotesNotFound />
+        )}
+
         {!isLoading && data && data?.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.map((note) => (

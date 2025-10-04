@@ -1,35 +1,15 @@
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { ArrowLeftIcon } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router";
+
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router";
+import { ArrowLeftIcon } from "lucide-react";
+
+import { useCreateNote } from "../hooks/useCreateNotes";
 
 const CreatePage = () => {
-  const navigate = useNavigate();
   const [data, setData] = useState({ title: "", content: "" });
 
-  const { isPending, mutate } = useMutation<
-    void,
-    Error,
-    { title: string; content: string }
-  >({
-    mutationFn: async (newNote) => {
-      const response = await axios.post(
-        "http://localhost:5001/api/notes",
-        newNote
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      toast.success("Note created successfully");
-      navigate("/");
-    },
-    onError: (error) => {
-      console.log("Error creating note", error);
-      toast.error("Failed to create note");
-    },
-  });
+  const { mutate, isPending } = useCreateNote();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,10 +19,7 @@ const CreatePage = () => {
       return;
     }
 
-    mutate({
-      title: data.title,
-      content: data.content,
-    });
+    mutate(data);
   };
 
   return (
