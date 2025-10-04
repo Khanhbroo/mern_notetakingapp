@@ -36,7 +36,7 @@ const NoteCard = ({ note }: { note: Note }) => {
               disabled={isPending}
             >
               {isPending ? (
-                <Loader2 className="size-4" />
+                <Loader2 className="size-4 animate-spin" />
               ) : (
                 <Trash2Icon className="size-4" />
               )}
