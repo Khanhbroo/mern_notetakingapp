@@ -1,0 +1,20 @@
+{
+  "name": "mern-notetakingapp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm instal --prefix frontend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Khanhbroo/mern_notetakingapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Khanhbroo/mern_notetakingapp/issues"
+  },
+  "homepage": "https://github.com/Khanhbroo/mern_notetakingapp#readme",
+  "description": ""
+}

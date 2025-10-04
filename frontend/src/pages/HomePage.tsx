@@ -14,7 +14,12 @@ const HomePage = () => {
       <Navbar />
       {isRateLimited && <RateLimitedUI />}
 
-      <div className="max-w-7xl mx-auto p-4 mt-6">
+      <div className="max-w-7xl mx-auto p-4 mt-4 text-center">
+        These notes are for decoration purpose. You can not update or delete
+        them, but you can create your own note and update, delete it.
+      </div>
+
+      <div className="max-w-7xl mx-auto p-4">
         {isLoading && (
           <div className="flex gap-2 items-center justify-center text-primary py-10">
             <Loader2 className="animate-spin" />

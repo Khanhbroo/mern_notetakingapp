@@ -2,7 +2,7 @@ import Note from "../models/Note.js";
 
 export const getAllNotes = async (_, res) => {
   try {
-    const notes = await Note.find().sort({ createdAt: 1 });
+    const notes = await Note.find().sort({ createdAt: -1 });
 
     if (notes) {
       res.status(200).json(notes);
@@ -64,13 +64,12 @@ export const updateNote = async (req, res) => {
 
 export const deleteNote = async (req, res) => {
   try {
-    const deletedNote = await Note.findByIdAndDelete(req.params.id, {
-      new: true,
-    });
+    const deletedNote = await Note.findByIdAndDelete(req.params.id);
 
     if (!deletedNote) {
-      return res.status(404).json({ message: "Note note found" });
+      return res.status(404).json({ message: "Note not found" });
     }
+
     res.status(200).json({ message: "Note has been deleted" });
   } catch (error) {
     console.error("Error in deleteNote controller", error);
