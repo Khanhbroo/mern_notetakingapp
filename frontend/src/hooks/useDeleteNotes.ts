@@ -4,8 +4,11 @@ import toast from "react-hot-toast";
 import { deleteNote } from "../api/noteApi";
 import { handleAxiosError } from "../libs/utils";
 import { queryClient } from "../libs/client";
+import { useNavigate } from "react-router";
 
-export const useDeleteNotes = () => {
+export const useDeleteNotes = ({ isNavigate }: { isNavigate: boolean }) => {
+  const navigate = useNavigate();
+
   return useMutation({
     mutationFn: async (_id: string) => {
       try {
@@ -18,6 +21,10 @@ export const useDeleteNotes = () => {
     onSuccess: () => {
       toast.success("Note deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["notes"] });
+
+      if (isNavigate) {
+        navigate("/");
+      }
     },
   });
 };

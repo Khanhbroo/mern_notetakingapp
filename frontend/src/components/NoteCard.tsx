@@ -5,7 +5,7 @@ import { formatDate } from "../libs/utils";
 import { useDeleteNotes } from "../hooks/useDeleteNotes";
 
 const NoteCard = ({ note }: { note: Note }) => {
-  const { mutate, isPending } = useDeleteNotes();
+  const { mutate, isPending } = useDeleteNotes({ isNavigate: false });
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -32,12 +32,13 @@ const NoteCard = ({ note }: { note: Note }) => {
             <PenSquareIcon className="size-4" />
             <button
               className="btn btn-ghost btn-xs text-error"
+              onClick={handleDelete}
               disabled={isPending}
             >
               {isPending ? (
                 <Loader2 className="size-4" />
               ) : (
-                <Trash2Icon className="size-4" onClick={handleDelete} />
+                <Trash2Icon className="size-4" />
               )}
             </button>
           </div>
